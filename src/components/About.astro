@@ -1,0 +1,39 @@
+---
+import Section from './Section.astro';
+import { site } from '../data/site';
+---
+
+<Section id="about" eyebrow="01 / about" title="About">
+  <div class="grid sm:grid-cols-3 gap-10">
+    <div class="sm:col-span-2 space-y-5 text-[color:var(--color-fg-muted)] leading-relaxed text-lg">
+      <p>
+        I'm {site.name.split(' ')[0]}, a full-stack developer with a focus on TypeScript,
+        Node.js, and modern frontends. I build resilient backends, accessible UIs, and
+        SEO-optimized sites that load fast and stay maintainable.
+      </p>
+      <p>
+        Recent work has spanned SSR migrations, GraphQL APIs, real-time collaboration features,
+        and CI/CD pipelines. I care about <span class="text-[color:var(--color-fg)]">measurable performance</span>,
+        clean abstractions, and shipping things people actually use.
+      </p>
+      <p>
+        Outside of code, I read about distributed systems, contribute to open source, and
+        maintain a few side projects you'll find below.
+      </p>
+    </div>
+    <aside class="space-y-4 text-sm">
+      <div>
+        <p class="text-[color:var(--color-fg-muted)] uppercase tracking-wider text-xs mb-1">Location</p>
+        <p>{site.location}</p>
+      </div>
+      <div>
+        <p class="text-[color:var(--color-fg-muted)] uppercase tracking-wider text-xs mb-1">Email</p>
+        <a href={`mailto:${site.email}`} class="hover:text-[color:var(--color-accent)] transition-colors break-all">{site.email}</a>
+      </div>
+      <div>
+        <p class="text-[color:var(--color-fg-muted)] uppercase tracking-wider text-xs mb-1">Status</p>
+        <p>Open to roles & contracts</p>
+      </div>
+    </aside>
+  </div>
+</Section>

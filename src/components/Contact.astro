@@ -1,0 +1,45 @@
+---
+import Section from './Section.astro';
+import { site, social } from '../data/site';
+---
+
+<Section
+  id="contact"
+  eyebrow="05 / contact"
+  title="Get in touch"
+  description="Open to full-time roles, contracts, and interesting open-source collaborations."
+>
+  <div class="grid sm:grid-cols-2 gap-8 items-start">
+    <div class="space-y-5">
+      <a
+        href={`mailto:${site.email}`}
+        class="block group border border-[color:var(--color-border)] rounded-lg p-6 hover:border-[color:var(--color-accent)] transition-colors"
+      >
+        <p class="text-sm font-mono text-[color:var(--color-fg-muted)] mb-1">email</p>
+        <p class="text-xl font-medium group-hover:text-[color:var(--color-accent)] transition-colors break-all">
+          {site.email}
+        </p>
+      </a>
+      <p class="text-[color:var(--color-fg-muted)]">
+        Replies usually within a day. For longer briefs, attach a PDF or link to a doc.
+      </p>
+    </div>
+    <ul class="space-y-3">
+      {social.map((s) => (
+        <li>
+          <a
+            href={s.url}
+            rel="me noopener"
+            target="_blank"
+            class="flex items-center justify-between border border-[color:var(--color-border)] rounded-lg px-5 py-4 hover:border-[color:var(--color-accent)] transition-colors group"
+          >
+            <span class="font-medium">{s.name}</span>
+            <span class="text-sm text-[color:var(--color-fg-muted)] group-hover:text-[color:var(--color-accent)] transition-colors">
+              {s.handle} →
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>

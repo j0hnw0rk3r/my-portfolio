@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="The page you're looking for doesn't exist." noindex>
+  <section class="mx-auto max-w-3xl px-6 py-32 text-center">
+    <p class="text-sm font-mono text-[color:var(--color-accent)] mb-4">404</p>
+    <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight">Page not found</h1>
+    <p class="mt-6 text-lg text-[color:var(--color-fg-muted)]">
+      That URL didn’t match anything. Try the home page.
+    </p>
+    <a
+      href="/"
+      class="mt-10 inline-flex items-center gap-2 px-5 py-3 rounded-md bg-[color:var(--color-accent)] text-[color:var(--color-bg)] font-medium hover:bg-[color:var(--color-accent-soft)] transition-colors"
+    >
+      Back home
+    </a>
+  </section>
+</BaseLayout>

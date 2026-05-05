@@ -1,0 +1,27 @@
+---
+import { site, social } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[color:var(--color-border)] mt-24">
+  <div class="mx-auto max-w-5xl px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+    <p class="text-sm text-[color:var(--color-fg-muted)]">
+      &copy; {year} {site.name}. Built with Astro.
+    </p>
+    <ul class="flex gap-5 text-sm">
+      {social.map((s) => (
+        <li>
+          <a
+            href={s.url}
+            rel="me noopener"
+            target="_blank"
+            class="text-[color:var(--color-fg-muted)] hover:text-[color:var(--color-accent)] transition-colors"
+          >
+            {s.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</footer>

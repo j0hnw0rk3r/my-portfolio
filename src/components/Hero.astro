@@ -1,0 +1,47 @@
+---
+import { site, social } from '../data/site';
+---
+
+<section id="home" class="relative overflow-hidden">
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(110,231,183,0.12),transparent_60%)]"
+  ></div>
+  <div class="relative mx-auto max-w-5xl px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
+    <p class="text-sm font-mono text-[color:var(--color-accent)] mb-4">
+      &gt; available for work
+    </p>
+    <h1 class="text-4xl sm:text-6xl font-semibold tracking-tight leading-[1.05] max-w-3xl">
+      {site.name}.
+      <span class="block text-[color:var(--color-fg-muted)] mt-2">
+        {site.role}.
+      </span>
+    </h1>
+    <p class="mt-8 text-lg sm:text-xl text-[color:var(--color-fg-muted)] max-w-2xl leading-relaxed">
+      {site.tagline}
+    </p>
+    <div class="mt-10 flex flex-wrap items-center gap-4">
+      <a
+        href="#projects"
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-md bg-[color:var(--color-accent)] text-[color:var(--color-bg)] font-medium hover:bg-[color:var(--color-accent-soft)] transition-colors"
+      >
+        View projects
+      </a>
+      <a
+        href={`mailto:${site.email}`}
+        class="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-[color:var(--color-border)] hover:border-[color:var(--color-accent)] transition-colors"
+      >
+        {site.email}
+      </a>
+    </div>
+    <ul class="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[color:var(--color-fg-muted)]">
+      {social.map((s) => (
+        <li>
+          <a href={s.url} rel="me noopener" target="_blank" class="hover:text-[color:var(--color-accent)] transition-colors">
+            {s.name} <span class="opacity-60">{s.handle}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

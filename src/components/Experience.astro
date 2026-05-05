@@ -1,0 +1,48 @@
+---
+import Section from './Section.astro';
+import { experience } from '../data/site';
+---
+
+<Section
+  id="experience"
+  eyebrow="04 / experience"
+  title="Experience"
+  description="Selected roles. See LinkedIn for the full history."
+>
+  <ol class="space-y-10 relative">
+    {experience.map((entry) => (
+      <li class="grid sm:grid-cols-[8rem_1fr] gap-4 sm:gap-8">
+        <p class="text-sm font-mono text-[color:var(--color-fg-muted)] pt-1">
+          {entry.start} — {entry.end}
+        </p>
+        <div>
+          <h3 class="text-lg font-semibold">
+            {entry.role}
+            <span class="text-[color:var(--color-fg-muted)] font-normal"> · </span>
+            {entry.url ? (
+              <a
+                href={entry.url}
+                rel="noopener"
+                target="_blank"
+                class="text-[color:var(--color-accent)] hover:underline"
+              >
+                {entry.company}
+              </a>
+            ) : (
+              <span class="text-[color:var(--color-accent)]">{entry.company}</span>
+            )}
+          </h3>
+          <p class="mt-2 text-[color:var(--color-fg-muted)]">{entry.summary}</p>
+          <ul class="mt-4 space-y-2 text-sm text-[color:var(--color-fg-muted)]">
+            {entry.highlights.map((h) => (
+              <li class="flex gap-3">
+                <span class="text-[color:var(--color-accent)] mt-1.5 shrink-0">▸</span>
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+    ))}
+  </ol>
+</Section>

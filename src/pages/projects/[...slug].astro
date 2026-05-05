@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects
+    .filter((p) => !p.data.draft)
+    .map((project) => ({
+      params: { slug: project.id },
+      props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { data } = project;
+
+const projectLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: data.title,
+  headline: data.title,
+  description: data.description,
+  url: new URL(`/projects/${project.id}`, Astro.site).toString().replace(/\/$/, ''),
+  dateCreated: `${data.year}`,
+  keywords: data.stack.join(', '),
+  author: {
+    '@type': 'Person',
+    name: site.name,
+    url: site.url,
+  },
+  ...(data.repo && { codeRepository: data.repo }),
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.tagline}
+  type="article"
+  jsonLd={projectLd}
+>
+  <article class="mx-auto max-w-3xl px-6 py-20 sm:py-24">
+    <nav class="mb-10 text-sm" aria-label="Breadcrumb">
+      <a href="/#projects" class="text-[color:var(--color-fg-muted)] hover:text-[color:var(--color-accent)] transition-colors">
+        ← All projects
+      </a>
+    </nav>
+    <header class="mb-10">
+      <p class="text-sm font-mono text-[color:var(--color-accent)] mb-4">
+        {data.year}{data.role && <> · {data.role}</>}
+      </p>
+      <h1 class="text-4xl sm:text-5xl font-semibold tracking-tight leading-tight">{data.title}</h1>
+      <p class="mt-5 text-xl text-[color:var(--color-fg-muted)] leading-relaxed">{data.tagline}</p>
+      <ul class="mt-7 flex flex-wrap gap-2">
+        {data.stack.map((t) => (
+          <li class="text-xs px-2.5 py-1 rounded bg-[color:var(--color-bg-soft)] border border-[color:var(--color-border)] font-mono">
+            {t}
+          </li>
+        ))}
+      </ul>
+      <div class="mt-7 flex flex-wrap gap-4 text-sm">
+        {data.repo && (
+          <a
+            href={data.repo}
+            rel="noopener"
+            target="_blank"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-[color:var(--color-border)] hover:border-[color:var(--color-accent)] hover:text-[color:var(--color-accent)] transition-colors"
+          >
+            View source ↗
+          </a>
+        )}
+        {data.demo && (
+          <a
+            href={data.demo}
+            rel="noopener"
+            target="_blank"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[color:var(--color-accent)] text-[color:var(--color-bg)] font-medium hover:bg-[color:var(--color-accent-soft)] transition-colors"
+          >
+            Live demo ↗
+          </a>
+        )}
+      </div>
+    </header>
+    <div class="prose-content text-lg leading-relaxed text-[color:var(--color-fg-muted)] space-y-6">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  .prose-content h2 {
+    color: var(--color-fg);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+  .prose-content h3 {
+    color: var(--color-fg);
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-content p { margin-block: 1em; }
+  .prose-content ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+  }
+  .prose-content ul li { margin-block: 0.4em; }
+  .prose-content code {
+    background: var(--color-bg-soft);
+    border: 1px solid var(--color-border);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  .prose-content a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+import Section from './Section.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const projects = allProjects
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => {
+    if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+    return b.data.year - a.data.year;
+  });
+---
+
+<Section
+  id="projects"
+  eyebrow="03 / work"
+  title="Selected Projects"
+  description="A few things I've shipped. Each links to source, a live demo, or both."
+>
+  <ul class="grid sm:grid-cols-2 gap-6">
+    {projects.map((project) => (
+      <li class="group">
+        <article class="h-full flex flex-col border border-[color:var(--color-border)] rounded-lg p-6 bg-[color:var(--color-surface)]/40 hover:border-[color:var(--color-accent)] transition-colors">
+          <header class="flex items-start justify-between gap-4 mb-3">
+            <h3 class="text-lg font-semibold">
+              <a
+                href={`/projects/${project.id}`}
+                class="after:absolute after:inset-0 hover:text-[color:var(--color-accent)] transition-colors relative"
+              >
+                {project.data.title}
+              </a>
+            </h3>
+            <span class="text-xs font-mono text-[color:var(--color-fg-muted)] shrink-0">{project.data.year}</span>
+          </header>
+          <p class="text-[color:var(--color-fg-muted)] flex-1">{project.data.tagline}</p>
+          <ul class="mt-5 flex flex-wrap gap-2 text-xs">
+            {project.data.stack.slice(0, 5).map((t) => (
+              <li class="px-2 py-1 rounded bg-[color:var(--color-bg-soft)] border border-[color:var(--color-border)] font-mono">
+                {t}
+              </li>
+            ))}
+          </ul>
+          <footer class="mt-5 flex gap-4 text-sm">
+            {project.data.repo && (
+              <a
+                href={project.data.repo}
+                rel="noopener"
+                target="_blank"
+                class="relative z-10 text-[color:var(--color-fg-muted)] hover:text-[color:var(--color-accent)] transition-colors"
+              >
+                Source ↗
+              </a>
+            )}
+            {project.data.demo && (
+              <a
+                href={project.data.demo}
+                rel="noopener"
+                target="_blank"
+                class="relative z-10 text-[color:var(--color-fg-muted)] hover:text-[color:var(--color-accent)] transition-colors"
+              >
+                Demo ↗
+              </a>
+            )}
+          </footer>
+        </article>
+      </li>
+    ))}
+  </ul>
+</Section>

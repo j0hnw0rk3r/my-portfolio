@@ -1,0 +1,84 @@
+---
+import { site, social } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonicalPath?: string;
+  type?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = site.description,
+  image = site.ogImage,
+  canonicalPath,
+  type = 'website',
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? site.url;
+const path = canonicalPath ?? Astro.url.pathname;
+const canonical = new URL(path, siteUrl + '/').toString().replace(/\/$/, '') || siteUrl;
+const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteUrl + '/').toString();
+
+const fullTitle = title === site.name ? `${site.name} — ${site.role}` : `${title} · ${site.name}`;
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.role,
+  description: site.description,
+  email: `mailto:${site.email}`,
+  url: siteUrl,
+  image: ogImageUrl,
+  sameAs: social.map((s) => s.url),
+};
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  url: siteUrl,
+  name: site.name,
+  description: site.description,
+};
+
+const ldBlocks: Record<string, unknown>[] = [personLd, websiteLd];
+if (jsonLd) {
+  ldBlocks.push(...(Array.isArray(jsonLd) ? jsonLd : [jsonLd]));
+}
+---
+
+<!-- Primary -->
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+{!noindex && <meta name="robots" content="index, follow, max-image-preview:large" />}
+<meta name="author" content={site.name} />
+<meta name="theme-color" content="#0b0d12" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+{ldBlocks.map((block) => (
+  <script type="application/ld+json" set:html={JSON.stringify(block)} />
+))}

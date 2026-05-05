@@ -1,0 +1,26 @@
+---
+import Section from './Section.astro';
+import { skills } from '../data/site';
+---
+
+<Section
+  id="skills"
+  eyebrow="02 / stack"
+  title="Skills & Tech Stack"
+  description="Tools I reach for, organized by where they live in the stack."
+>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {skills.map((group) => (
+      <div class="border border-[color:var(--color-border)] rounded-lg p-6 bg-[color:var(--color-surface)]/40">
+        <h3 class="text-sm font-mono text-[color:var(--color-accent)] mb-4">{group.category}</h3>
+        <ul class="flex flex-wrap gap-2">
+          {group.items.map((item) => (
+            <li class="text-sm px-3 py-1.5 rounded-md bg-[color:var(--color-bg-soft)] border border-[color:var(--color-border)]">
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</Section>
